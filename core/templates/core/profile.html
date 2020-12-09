@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+</head>
+<body>
+  <h1>{{ profile.user.username }}</h1>
+  <h2> Дата рождения:
+    {% if profile.birth_date %}
+      <i>{{ profile.birth_date|date:"d F Y" }}</i>
+    {% endif %}
+  </h2>
+
+  <h2>
+    Обо мне:
+    <i>{{ profile.about }}</i>
+  </h2>
+  <h2>
+    <img class="avatar" src="{{ profile.avatar.url }}">
+  </h2>
+  {% if user.id == profile.user.id %}
+    <a href="{% url 'core:edit-profile' user.id %}">Редактировать профиль</a>
+  {% else %}
+    <form action="{% url 'core:add-remove-friend' profile.user.id %}" method="POST">
+      {% csrf_token %}
+      {% if profile in user.user_profile.friends.all %}
+        <button type="submit">Удалить из друзей</button>
+      {% else %}
+        <button type="submit">Добавить в друзья</button>
+      {% endif %}
+    </form>
+  {% endif %}
+  <hr>
+  <p>Друзья:</p>
+  <ul>
+  {% for friend in profile.friends.all %}
+    <li>
+      <a href='{% url "core:profile" friend.id %}'>{{ friend }}</a>
+    </li>
+  {% endfor %}
+  </ul>
+  <hr>
+  <p>Публикации:</p>
+  {% for post in profile.user.posts.all %}
+    <a href="{% url 'core:post' post.id %}">
+      <img src="{{ post.image.url }}">
+    </a>
+  {% endfor %}
+</body>
+</html>

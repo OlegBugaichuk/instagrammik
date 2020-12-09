@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <article>
+    {% if not user.is_authenticated %}
+      <form method='POST'>
+        {% csrf_token %}
+        {% for field in form %}
+          <div>
+              <p>{{ field }}</p>
+          </div>
+        {% endfor %}
+
+        <button type='submit'>Войти</button>
+      </form>
+      <a href="{% url 'core:password_reset' %}"> Сбросить пароль </a>
+    {% else %}
+      <h3> Привет, {{ user.username }} </h3>
+      <a href="{% url 'core:index' %}">На главную</a>
+      <a href="{% url 'core:logout' %}">Выйти из профиля</a>
+    {% endif %}
+  </article>
+</body>
+</html>

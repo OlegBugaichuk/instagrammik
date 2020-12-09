@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {% if post.author != user %}
+    <h1 class='msg'>Вы не можете удалить данную публикацию!!!</h1>
+  {% else %}
+    <h1 class='msg'>Вы уверены что хотите удалить публикацию?</h1>
+    <form method="POST" action='{% url "core:post-delete" post.id %}'>
+      {% csrf_token %}
+      <button type='submit'>Удалить</button>
+      <a href="{% url 'core:post-detail' post.id %}">Нет</a>
+    </form>
+  {% endif %}
+</body>
+</html>

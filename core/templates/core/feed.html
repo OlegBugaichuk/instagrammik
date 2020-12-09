@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+  {% if feed_posts %}
+  <ul>
+    {% for post in feed_posts %}
+    <li>
+
+      <a href="{% url 'core:post-detail' post.id %}">
+        <p> {{ post.author }} </p>
+        <p> {{ post.date_pub }} </p>
+        <p> <img alt="post's image" src="{{ post.image.url }}" style="width: 250px; height: 250px;"> </p>
+        <p> {{ post.description }} </p>
+        <p> Likes: {{ post.likes.count }}</p>
+      </a>
+
+      <form method="POST" action="{% url 'core:post-like' post.id %}">
+        {% csrf_token %}
+        <button type='submit'>Like</button>
+      </form>
+      
+
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>Пока нет ни одной публикации</p>
+  {% endif %}
+
+
+</body>
+
+</html>

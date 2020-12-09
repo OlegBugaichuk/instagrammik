@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  {% if post.author == user %}
+    <a href="{% url 'core:post-edit' post.id %}">Изменить публикацию</a>
+  {% endif %}
+  <p><img alt="post's image" src="{{ post.image.url }}" style="width: 250px; height: 250px;"></p>
+  <p>{{ post.author }}</p>
+  <p>{{ post.date_pub }}</p>
+  <p>{{ post.description }}</p>
+  <p>Likes: {{ post.likes.count }}</p>
+  <br>
+
+  <div class="comments">
+    {% for comment in comments %}
+    <p>{{ comment.author }}</p>
+    <p>{{ comment.text }} </p>
+    </br>
+    {% endfor %}
+  </div>
+
+  {% if user.is_authenticated %}
+  <form method='POST'>
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type='submit'>Добавить комментарий</button>
+  </form>
+  {% endif %}
+</body>
+
+</html>
